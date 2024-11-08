@@ -30,7 +30,7 @@ To streamline local development of Apache Airflow, **Astro** was used. The comma
 
 With the integration of Astro, the project now benefits from an easy-to-use local development environment for testing the DAGs before deploying them to production.
 
-### Step 2: Configuration for Execution
+## Step 2: Configuration for Execution
 
 After initializing the local development environment with `astro dev init`, the next step is to configure and run the Airflow environment locally. This is done by using the `astro dev start` command. The command initializes the Docker containers and sets up the required environment based on the configurations in the `.astro` folder and other related files.
 

@@ -4,6 +4,7 @@ from airflow.operators.python import PythonOperator
 from include.custom_hooks.ucimlrepo_hook import UCIDataFetchHook  
 from airflow.utils.task_group import TaskGroup
 import yaml
+import logging
 
 def Load_config_operator(config_path):
     with open(config_path, "r") as file:
@@ -31,13 +32,18 @@ default_args = {
 }
 
 def extract_and_save_using_hook(dataset_id: str,destination_path: str):
-    hook = UCIDataFetchHook(dataset_id=dataset_id, output_path=destination_path)
-    hook.get_data()
+    try:
+        hook = UCIDataFetchHook(dataset_id=dataset_id, output_path=destination_path)
+        hook.get_data()
+        logging.info(f"Successfully fetched and saved dataset: {dataset_id} to {destination_path}")
+    except Exception as e:
+        logging.error(f"Error fetching dataset {dataset_id}: {str(e)}")
+        raise
 
 dag = DAG(
     "fetch_and_save_uci_data",
     default_args=default_args,
-    description="",
+    description="Fetch and save datasets from UCI repository",
     schedule_interval=None,
     catchup=False,
     params={"config_path": "/usr/local/airflow/dags/config/uci_data_fetch_config.yaml"},
@@ -59,17 +65,5 @@ with dag:
                         "destination_path": destination_path
                     },
                 )
-
-
-
-
-
-
-
-
-
-
-
-
 
 extract_data_task
