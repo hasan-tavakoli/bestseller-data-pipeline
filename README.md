@@ -39,8 +39,9 @@ To start the local development environment, run the following command:
 ```bash
 astro dev start
 
-Airflow Login Credentials
+### Airflow Login Credentials
+
 To access the Airflow UI in your local development environment, use the following credentials:
 
-Username: admin
-Password: admin
+- **Username**: admin
+- **Password**: admin
