@@ -39,26 +39,29 @@ To start the local development environment, run the following command:
 ```bash
 astro dev start
 ```
-### Airflow Login Credentials
+# Airflow Login Credentials
 
 To access the Airflow UI in your local development environment, use the following credentials:
 
 - **Username**: admin
 - **Password**: admin
 
-### Step 3: Data Extraction and Storage Strategy
+## Step 3: Data Extraction and Storage Strategy
 
---**To efficiently extract data from external sources, a custom Airflow hook named 
-UCIDataFetchHook was developed. This hook connects to the UCI Machine Learning Repository, downloads datasets, and stores them in a local directory.
+### Custom Hook for Data Extraction
 
--**Why a Custom Hook?
-Reusability: The hook is reusable across multiple DAGs, allowing consistent data extraction without rewriting code.
-Scalability: It simplifies connecting to external data sources, making the pipeline extensible for future use cases.
-Optimization: Using hooks allows for better separation of concerns, improving code maintainability.
+To efficiently extract data from external sources, a custom Airflow hook named **UCIDataFetchHook** was developed. This hook connects to the UCI Machine Learning Repository, downloads datasets, and stores them in a local directory.
 
--**A dedicated DAG named (fetch_and_save_uci_data) was created to automate the data extraction and storage process. This DAG utilizes the custom hook to fetch datasets and save them as CSV files.
+#### Why a Custom Hook?
+- **Reusability**: The hook is reusable across multiple DAGs, allowing consistent data extraction without rewriting code.
+- **Scalability**: It simplifies connecting to external data sources, making the pipeline extensible for future use cases.
+- **Optimization**: Using hooks allows for better separation of concerns, improving code maintainability.
 
-Key Features:
-Dynamic Task Generation: The DAG reads dataset configurations from a YAML file (uci_data_fetch_config.yaml). This configuration-based approach allows for the easy addition of new datasets by updating the configuration file.
-Modularity: Each dataset extraction is handled as a separate task, making the DAG modular and easier to maintain.
-Scalability: By separating dataset configurations from the code, the pipeline can be extended to handle new data sources with minimal changes.
+### Dedicated DAG for Data Extraction and Storage
+
+A dedicated DAG named `fetch_and_save_uci_data` was created to automate the data extraction and storage process. This DAG utilizes the custom hook to fetch datasets and save them as CSV files.
+
+#### Key Features:
+- **Dynamic Task Generation**: The DAG reads dataset configurations from a YAML file (`uci_data_fetch_config.yaml`). This configuration-based approach allows for the easy addition of new datasets by updating the configuration file.
+- **Modularity**: Each dataset extraction is handled as a separate task, making the DAG modular and easier to maintain.
+- **Scalability**: By separating dataset configurations from the code, the pipeline can be extended to handle new data sources with minimal changes.
