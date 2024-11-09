@@ -1,0 +1,8 @@
+files:
+  - snowflake_conn_id: "snowflake-bs"
+    stage_name: "BESTSELLER.RAW.DATA_STAGE"
+    local_file_name: "online_retail.csv"
+    sql_craete_table: "raw_online_retail.sql"
+    snowflake_table: "raw_online_retail"
+    file_format: "csv"
+ 

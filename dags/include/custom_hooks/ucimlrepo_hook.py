@@ -27,7 +27,7 @@ class UCIDataFetchHook(BaseHook):
         try:
             if not self.dataset:
                 self._fetch_dataset()
-            
+
             if self.dataset:
                 features_df = pd.DataFrame(self.dataset.data.features)
                 targets_df = pd.DataFrame(self.dataset.data.targets)
@@ -37,10 +37,12 @@ class UCIDataFetchHook(BaseHook):
                     data_df.to_csv(self.output_path, index=False)
                     self.logger.info(f"Dataset saved to {self.output_path}")
                 else:
-                    raise ValueError("Output path must be provided to save the CSV file.")
+                    raise ValueError(
+                        "Output path must be provided to save the CSV file."
+                    )
             else:
                 raise ValueError("Dataset has not been fetched.")
-        
+
         except Exception as e:
             self.logger.error(f"Error during dataset extraction: {str(e)}")
             raise
