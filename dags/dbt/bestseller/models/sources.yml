@@ -1,0 +1,12 @@
+version: 2
+sources:
+  - name: bestseller
+    schema: raw
+    tables:
+      - name: online_retail
+        description: "Data related to online retail transactions"
+        identifier: raw_online_retail
+        loaded_at_field: InvoiceDate
+        freshness:
+            warn_after: {count: 1, period: day}
+            error_after: {count: 3, period: day}

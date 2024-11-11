@@ -1,7 +1,9 @@
 CREATE TABLE IF NOT EXISTS BESTSELLER.RAW.raw_online_retail (
+    InvoiceNo STRING,          
+    StockCode STRING, 
     Description STRING,
     Quantity INTEGER,
-    InvoiceDate DATE,
+    InvoiceDate TIMESTAMP,
     UnitPrice FLOAT,
     CustomerID STRING,
     Country STRING

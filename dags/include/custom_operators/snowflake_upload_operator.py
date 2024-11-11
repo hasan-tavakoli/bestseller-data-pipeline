@@ -56,7 +56,7 @@ class SnowflakeUploadOperator(BaseOperator):
         try:
             if self.file_format == "csv":
                 file_format_sql = """
-                FILE_FORMAT = (TYPE = 'CSV', SKIP_HEADER = 1, FIELD_OPTIONALLY_ENCLOSED_BY = '"', FIELD_DELIMITER = ',', DATE_FORMAT = 'MM/DD/YYYY HH24:MI')
+                FILE_FORMAT = (TYPE = 'CSV', SKIP_HEADER = 1, FIELD_OPTIONALLY_ENCLOSED_BY = '"', FIELD_DELIMITER = ',', TIMESTAMP_FORMAT = 'MM/DD/YYYY HH24:MI')
                 """
             elif self.file_format == "json":
                 file_format_sql = "FILE_FORMAT = (TYPE = 'JSON')"
@@ -64,7 +64,7 @@ class SnowflakeUploadOperator(BaseOperator):
                 file_format_sql = "FILE_FORMAT = (TYPE = 'PARQUET')"
             elif self.file_format == "xlsx":
                 file_format_sql = """
-                FILE_FORMAT = (TYPE = 'CSV', SKIP_HEADER = 1, FIELD_OPTIONALLY_ENCLOSED_BY = '"', FIELD_DELIMITER = ',', DATE_FORMAT = 'MM/DD/YYYY HH24:MI')
+                FILE_FORMAT = (TYPE = 'CSV', SKIP_HEADER = 1, FIELD_OPTIONALLY_ENCLOSED_BY = '"', FIELD_DELIMITER = ',', TIMESTAMP_FORMAT = 'MM/DD/YYYY HH24:MI')
                 """
             else:
                 raise ValueError(f"Unsupported file format: {self.file_format}")
@@ -73,7 +73,7 @@ class SnowflakeUploadOperator(BaseOperator):
             COPY INTO {self.snowflake_table}
             FROM @{self.stage_name}/{self.local_file_name}
             {file_format_sql}
-            ON_ERROR = 'SKIP_FILE';
+            ON_ERROR = 'CONTINUE';
             """
             self.snowflake_hook.run(copy_sql)
             self.log.info(
@@ -108,7 +108,7 @@ class SnowflakeUploadOperator(BaseOperator):
                 self._convert_excel_to_csv()
             self.load_data_from_stage_to_table()
             if os.path.exists(self.local_file_path):
-                os.remove(self.local_file_path)
+                # os.remove(self.local_file_path)
                 self.log.info(
                     f"Local file {self.local_file_path} deleted successfully."
                 )
