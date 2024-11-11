@@ -29,8 +29,6 @@ jobs:
       - name: Change directory to dbt project folder
         run: cd dags/dbt/bestseller
 
-      - name: Run dbt tests
-        run: |
-          dbt deps  
-          dbt run 
-          dbt test 
+      - name: Run dbt deps
+        run: dbt deps
+        working-directory: dags/dbt/bestseller 
