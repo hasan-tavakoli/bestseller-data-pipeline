@@ -26,9 +26,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install dbt
 
+      - name: Change directory to dbt project folder
+        run: cd dags/dbt/bestseller
 
       - name: Run dbt tests
         run: |
-          dbt deps  # Install any dbt dependencies
-          dbt run --profiles-dir .dbt  # Run dbt models
-          dbt test --profiles-dir .dbt  # Run dbt tests
+          dbt deps  
+          dbt run 
+          dbt test 
