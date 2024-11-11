@@ -24,7 +24,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt  # Make sure dbt is in the requirements.txt
+          pip install dbt
+
 
       - name: Run dbt tests
         run: |
