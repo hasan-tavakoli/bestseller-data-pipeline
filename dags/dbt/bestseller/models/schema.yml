@@ -1,0 +1,36 @@
+version: 2
+models:
+  - name: dim_customer
+    description: 'Customer dimension table.'
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+
+  - name: dim_product
+    description: 'Product dimension table.'
+    columns:
+      - name: product_id
+        tests:
+          - not_null
+
+  - name: fct_transactions
+    description: 'Fact table for transactions.'
+    columns:
+      - name: transaction_id
+        tests:
+          - not_null
+      - name: product_unique_id
+        tests:
+          - relationships:
+              to: ref('dim_product')
+              field: product_unique_id
+      - name: customer_unique_id
+        tests:
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_unique_id
+      - name: quantity
+        description: ''
+        tests:
+          - positive_value

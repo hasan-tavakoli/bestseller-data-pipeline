@@ -1,9 +1,12 @@
+{{ log_message("Starting to extract data from raw_online_retail source.", level='info') }}
+
 WITH raw_online_retail AS (
     SELECT
         *
     FROM
         {{ source('bestseller', 'online_retail') }}
 )
+{{ log_message("Data extracted. Counting rows.", level='info') }}
 SELECT
     InvoiceNo AS transaction_id,
     CASE
@@ -26,3 +29,6 @@ SELECT
         ) AS row_num
 FROM
     raw_online_retail
+
+
+{{ log_message("Transformation src_online_retail completed.", level='info') }}

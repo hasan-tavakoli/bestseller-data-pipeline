@@ -2,7 +2,7 @@
 materialized = 'table',
 ) }}
 
-
+{{ log_message('Starting extraction for transactions data.', level='info') }}
 WITH transactions AS (
     SELECT 
         tr.customer_id,
@@ -22,6 +22,7 @@ dim_dates AS (
         d.yearquarternum
     FROM {{ ref('dim_date') }} as d
 ),
+{{ log_message('Joining transactions with dim_date to create customer_transactions.', level='info') }}
 customer_transactions AS (
     SELECT 
         t.customer_id,
@@ -38,6 +39,7 @@ customer_transactions AS (
     JOIN dim_dates dd 
     ON t.transaction_date_numeric = dd.datenum
 )
+{{ log_message('Aggregating data for customer transactions.', level='info') }}
 
 SELECT 
     ct.customer_id,
@@ -53,3 +55,4 @@ SELECT
 FROM customer_transactions ct
 GROUP BY ct.customer_id
 ORDER BY recency ASC
+{{ log_message("Product transformation customer_segmentation_mart successfully.", level='info') }}

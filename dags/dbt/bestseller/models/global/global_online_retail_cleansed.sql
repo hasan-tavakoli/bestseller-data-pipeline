@@ -1,15 +1,20 @@
 {{
   config(
     materialized = 'table'
-    )
+  )
 }} 
+
+{{ log_message("Starting extraction from src_online_retail source.", level='info') }}
 
 WITH src_online_retail AS (
     SELECT
         *
     FROM
-        {{ ref('src_online_retail') }} where row_num=1
+        {{ ref('src_online_retail') }} 
+    WHERE row_num = 1
 )
+
+{{ log_message("Data extracted from src_online_retail. Transforming data.", level='info') }}
 
 SELECT
     transaction_id,
@@ -22,15 +27,16 @@ SELECT
     customer_country,
     CASE
         WHEN product_id IS NULL OR product_id = '' THEN 'service'
-        WHEN LENGTH(product_id) != 5 OR  product_id REGEXP '^[A-Za-z]+$' THEN 'service'
+        WHEN LENGTH(product_id) != 5 OR product_id REGEXP '^[A-Za-z]+$' THEN 'service'
         ELSE 'product'
-    END AS is_service
-    ,CASE 
-           WHEN LEFT(transaction_id, 1) = 'C' THEN 'cancelled'
-           ELSE 'normal'
-       END AS transaction_status
-       ,
-      CASE
+    END AS is_service,
+    
+    CASE 
+        WHEN LEFT(transaction_id, 1) = 'C' THEN 'cancelled'
+        ELSE 'normal'
+    END AS transaction_status,
+
+    CASE
         WHEN transaction_status = 'normal' AND quantity > 0 AND unit_price = 0 THEN 'free_or_promotion'
         WHEN transaction_status = 'normal' AND quantity < 0 AND unit_price = 0 THEN 'return_free'
         WHEN transaction_status = 'normal' AND quantity < 0 AND unit_price > 0 THEN 'return_paid'
@@ -38,4 +44,6 @@ SELECT
         ELSE 'sale'
     END AS transaction_type
 FROM
-    src_online_retail 
+    src_online_retail
+
+{{ log_message("Transformation completed. Data processed:global_online_retail_cleansed successfully.", level='info') }}

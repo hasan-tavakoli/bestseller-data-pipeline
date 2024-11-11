@@ -4,7 +4,7 @@
    on_schema_change='fail'
  )
 }}
-
+{{ log_message("Starting to cleanse global online retail data.", level='info') }}
 WITH global_online_retail_cleansed AS (
     SELECT 
         customer_id,
@@ -17,6 +17,7 @@ WITH global_online_retail_cleansed AS (
         AND is_service='product'
     GROUP BY customer_id, customer_country
 )
+{{ log_message("Global online retail data cleansed. Starting transformation.", level='info') }}
 SELECT 
     {{ dbt_utils.surrogate_key(['lc.customer_id', 'lc.customer_country']) }} AS customer_unique_id,
     lc.customer_id,  
@@ -32,3 +33,4 @@ FROM global_online_retail_cleansed lc
         OR 
         lc.customer_country != t.customer_country  
 {% endif %}
+{{ log_message("Transformation dim_customer successfully.", level='info') }}

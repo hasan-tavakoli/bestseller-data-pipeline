@@ -4,7 +4,7 @@
    on_schema_change='fail'
  )
 }}
-
+{{ log_message('Starting incremental model processing for global_online_retail_cleansed.', level='info') }}
 WITH global_online_retail_cleansed AS (
     SELECT 
         transaction_id,
@@ -38,6 +38,7 @@ customer_ids AS (
         customer_country,
     FROM {{ ref('dim_customer') }}
 )
+{{ log_message('Joining global_online_retail_cleansed with product and customer tables.', level='info') }}
 SELECT  
      gr.transaction_id,
      pi.product_unique_id,
@@ -63,3 +64,5 @@ JOIN customer_ids ci
 {% if is_incremental() %}
 WHERE gr.transaction_date > (select max(transaction_date) from {{ this }})
 {% endif %}
+
+{{ log_message("Product transformation fct_transactions successfully.", level='info') }}
