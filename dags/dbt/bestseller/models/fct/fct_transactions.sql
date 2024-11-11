@@ -22,7 +22,6 @@ WITH global_online_retail_cleansed AS (
     WHERE  
         transaction_status='normal' 
         AND transaction_type='sale'  
-        AND is_service='product'
 ),
 product_ids AS (
     SELECT 

@@ -17,20 +17,18 @@ WITH src_online_retail AS (
 {{ log_message("Data extracted from src_online_retail. Transforming data.", level='info') }}
 
 SELECT
-    transaction_id,
+    CASE
+        WHEN transaction_id REGEXP '^[A-Za-z]\\d{6}$' AND NOT LEFT(transaction_id, 1) = 'C'
+        THEN REGEXP_REPLACE(transaction_id, '^[A-Za-z]', '')
+        ELSE transaction_id
+    END AS transaction_id,
     product_id,
     product_name,
     quantity,
     transaction_date,
     unit_price,
     customer_id,
-    customer_country,
-    CASE
-        WHEN product_id IS NULL OR product_id = '' THEN 'service'
-        WHEN LENGTH(product_id) != 5 OR product_id REGEXP '^[A-Za-z]+$' THEN 'service'
-        ELSE 'product'
-    END AS is_service,
-    
+    customer_country,   
     CASE 
         WHEN LEFT(transaction_id, 1) = 'C' THEN 'cancelled'
         ELSE 'normal'
@@ -44,6 +42,6 @@ SELECT
         ELSE 'sale'
     END AS transaction_type
 FROM
-    src_online_retail
+    src_online_retail where is_service='product'
 
 {{ log_message("Transformation completed. Data processed:global_online_retail_cleansed successfully.", level='info') }}

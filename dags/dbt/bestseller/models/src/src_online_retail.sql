@@ -19,9 +19,14 @@ SELECT
     UnitPrice AS unit_price,
        CASE
         WHEN CustomerID IS NULL THEN 'unknown' 
-        WHEN CustomerID LIKE '%.0' THEN SUBSTRING(CustomerID, 1, LENGTH(CustomerID) - 2)  -- حذف .0 از انتهای رشته
+        WHEN CustomerID LIKE '%.0' THEN SUBSTRING(CustomerID, 1, LENGTH(CustomerID) - 2) 
         ELSE CustomerID  
     END AS customer_id,
+    CASE
+        WHEN product_id IS NULL OR product_id = '' THEN 'service'
+        WHEN LENGTH(product_id) != 5 OR product_id REGEXP '^[A-Za-z]+$' THEN 'service'
+        ELSE 'product'
+    END AS is_service,
     Country AS customer_country,
     ROW_NUMBER() OVER (
             PARTITION BY InvoiceNo, StockCode, InvoiceDate, Description, Quantity, UnitPrice, CustomerID, Country

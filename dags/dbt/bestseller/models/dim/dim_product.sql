@@ -12,8 +12,7 @@ WITH global_online_retail_cleansed AS (
     FROM {{ ref('global_online_retail_cleansed') }} 
     WHERE  
     transaction_status='normal' and 
-    transaction_type='sale'  and
-    is_service='product'
+    transaction_type='sale'
     GROUP BY product_id, product_name
 )
 {{ log_message("Product data cleansed. Starting transformation.", level='info') }}
