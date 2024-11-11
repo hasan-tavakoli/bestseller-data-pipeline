@@ -25,10 +25,15 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install dbt
-
-      - name: Change directory to dbt project folder
-        run: cd dags/dbt/bestseller
+        working-directory: dags/dbt/bestseller  
 
       - name: Run dbt deps
         run: dbt deps
-        working-directory: dags/dbt/bestseller 
+        working-directory: dags/dbt/bestseller  
+      - name: Run dbt run
+        run: dbt run
+        working-directory: dags/dbt/bestseller  
+
+      - name: Run dbt test
+        run: dbt test
+        working-directory: dags/dbt/bestseller  
