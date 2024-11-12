@@ -59,6 +59,28 @@ To access the Airflow UI in your local development environment, use the followin
 - **Username**: admin
 - **Password**: admin
 
+### Setup Instructions
+
+Before running Astro, you need to execute a file named `create.sql` located in the `files` folder (as mentioned above). You must run this file in **Snowflake**. Make sure that **all the instructions** in the file are executed, as this is needed for the initial setup of Snowflake.
+
+#### Creating Snowflake Connections in Airflow
+
+After running Astro, once you enter to **Airflow**, you need to create two connections to **Snowflake**:
+
+1. **dbt_to_snowflake**:  
+   This connection should point to the **DEV schema**, using the **data warehouse**, **username**, and **password** provided in the file or chosen by you.
+
+2. **snowflake-bs**:  
+   This connection should point to the **RAW schema**.
+
+### Running the DAGs
+
+Once these connections are set up, you can run the first DAG, `fetch_and_save_uci_data.py`, which will fetch data. This DAG can be scheduled to run whenever necessary.
+
+When the second DAG, `load_various_files_to_snowflake.py`, is executed, it will automatically trigger the third DAG, `bestseller_db_setup.py`.
+
+Make sure all instructions are followed properly.
+
 ## Step 3: Data Extraction and Storage Strategy
 
 ### Custom Hook for Data Extraction
