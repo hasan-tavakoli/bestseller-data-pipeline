@@ -133,7 +133,8 @@ For each file, the user provides the necessary information in the configuration 
 
 In Step 5, the design model is structured as shown below:
 
-![Model Design](include/image.png)
+![Model Design](https://github.com/hasan-tavakoli/bestseller-data-pipeline/blob/main/image/image.png?raw=true)
+
 
 This design represents the architecture and flow of the data pipeline, illustrating how each component interacts with Snowflake and Airflow.
 
