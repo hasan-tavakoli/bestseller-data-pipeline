@@ -198,3 +198,13 @@ The dimensions could potentially have other tables, or they might not be needed 
 ### RFM Analysis and Data Mart
 
 In the next step, based on the RFM (Recency, Frequency, Monetary) analysis requirement, I created a consolidated mart, which integrates data from the dimensions obtained via(seed) DBT and the fact table I created.
+
+### Logging and Testing
+
+Logging and testing have also been implemented throughout the pipeline to ensure data integrity and successful execution of the processes.
+
+- **Logging:** 
+  Detailed logging has been set up to capture important events during the execution of the DAGs. This includes logging information such as the success or failure of tasks, processing times, and any exceptions that may arise. This allows for better monitoring and troubleshooting of the data pipeline.
+
+- **Testing:** 
+  Various tests have been created to validate the functionality of the pipeline. 
