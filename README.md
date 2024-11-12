@@ -9,6 +9,7 @@ This project builds an end-to-end data pipeline to process and analyze e-commerc
 - **Snowflake**: Serves as the data warehouse for storing and querying data.
 
 ## Project Structure
+```bash
 bestseller-data-pipeline
 │
 ├── .astro                    # .astro directory (configuration for Astro)
@@ -34,7 +35,7 @@ bestseller-data-pipeline
 ├── packages.txt               # packages.txt (list of required packages or dependencies)
 ├── README.md                  # README file (documentation of the project)
 └── requirements.txt           # requirements.txt (Python dependencies for the project)
-
+```
 
 ### Airflow with Astro
 
