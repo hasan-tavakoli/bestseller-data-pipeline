@@ -73,7 +73,7 @@ After running Astro, once you enter to **Airflow**, you need to create two conne
 2. **snowflake-bs**:  
    This connection should point to the **RAW schema**.
 
-### Running the DAGs
+#### Running the DAGs
 
 Once these connections are set up, you can run the first DAG, `fetch_and_save_uci_data.py`, which will fetch data. This DAG can be scheduled to run whenever necessary.
 
@@ -129,6 +129,12 @@ A custom operator was designed to handle data in different formats beyond just C
 For each file, the user provides the necessary information in the configuration file. This allows for easy management of different data sources and ensures the pipeline can handle various types of files seamlessly. The flexibility of the pipeline ensures it can scale as new data sources are added without requiring significant changes to the existing codebase.
 
 
+## Step 5 - Model Design
 
+In Step 5, the design model is structured as shown below:
+
+![Model Design](include/image.png)
+
+This design represents the architecture and flow of the data pipeline, illustrating how each component interacts with Snowflake and Airflow.
 
 
