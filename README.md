@@ -208,3 +208,6 @@ Logging and testing have also been implemented throughout the pipeline to ensure
 
 - **Testing:** 
   Various tests have been created to validate the functionality of the pipeline. 
+
+
+![Model Design](https://github.com/hasan-tavakoli/bestseller-data-pipeline/blob/main/image/image2.png?raw=true)
