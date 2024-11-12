@@ -23,7 +23,7 @@ GRANT ROLE transform to USER dbt;  -- Grant the 'transform' role to the 'dbt' us
 -- Create our database and schemas
 CREATE DATABASE IF NOT EXISTS BESTSELLER;  -- Create the 'BESTSELLER' database if it does not already exist.
 CREATE SCHEMA IF NOT EXISTS BESTSELLER.RAW;  -- Create the 'RAW' schema in the 'BESTSELLER' database if it does not already exist.
-
+CREATE SCHEMA IF NOT EXISTS BESTSELLER.DEV;
 -- Set up permissions to role `transform`
 GRANT ALL ON WAREHOUSE COMPUTE_WH TO ROLE transform;  -- Grant full permissions on 'COMPUTE_WH' warehouse to the 'transform' role.
 GRANT ALL ON DATABASE BESTSELLER to ROLE transform;  -- Grant full permissions on the 'BESTSELLER' database to the 'transform' role.
@@ -31,6 +31,14 @@ GRANT ALL ON ALL SCHEMAS IN DATABASE BESTSELLER to ROLE transform;  -- Grant ful
 GRANT ALL ON FUTURE SCHEMAS IN DATABASE BESTSELLER to ROLE transform;  -- Grant full permissions on future schemas in the 'BESTSELLER' database to the 'transform' role.
 GRANT ALL ON ALL TABLES IN SCHEMA BESTSELLER.RAW to ROLE transform;  -- Grant full permissions on all tables in the 'BESTSELLER.RAW' schema to the 'transform' role.
 GRANT ALL ON FUTURE TABLES IN SCHEMA BESTSELLER.RAW to ROLE transform;  -- Grant full permissions on future tables in the 'BESTSELLER.RAW' schema to the 'transform' role.
+GRANT ALL ON ALL TABLES IN SCHEMA BESTSELLER.DEV to ROLE transform;  -- Grant full permissions on all tables in the 'BESTSELLER.DEV' schema to the 'transform' role.
+GRANT ALL ON FUTURE TABLES IN SCHEMA BESTSELLER.DEV to ROLE transform;  -- Grant full permissions on future tables in the 'BESTSELLER.DEV' schema to the 'transform' role.
+
+-- Create the stage for raw data loading
+CREATE STAGE BESTSELLER.RAW.DATA_STAGE
+
+-- Grant read and write access to the stage for the 'transform' role
+GRANT READ, WRITE ON STAGE BESTSELLER.RAW.DATA_STAGE TO ROLE transform;
 
 
 --Finally, two connections are required:

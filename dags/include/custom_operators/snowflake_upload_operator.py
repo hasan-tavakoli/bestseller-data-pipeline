@@ -52,7 +52,6 @@ class SnowflakeUploadOperator(BaseOperator):
             raise
 
     def load_data_from_stage_to_table(self):
-
         try:
             if self.file_format == "csv":
                 file_format_sql = """
@@ -97,6 +96,17 @@ class SnowflakeUploadOperator(BaseOperator):
             self.log.error(f"Failed to convert Excel to CSV: {str(e)}")
             raise
 
+    def _remove_file_from_stage(self):
+        try:
+            remove_sql = f"REMOVE @{self.stage_name}/{self.local_file_name};"
+            self.snowflake_hook.run(remove_sql)
+            self.log.info(
+                f"File {self.local_file_name} removed from stage {self.stage_name}."
+            )
+        except Exception as e:
+            self.log.error(f"Failed to remove file from stage: {str(e)}")
+            raise
+
     def execute(self, context):
         try:
             self.snowflake_hook = SnowflakeHook(
@@ -107,8 +117,9 @@ class SnowflakeUploadOperator(BaseOperator):
             if self.file_format == "xlsx":
                 self._convert_excel_to_csv()
             self.load_data_from_stage_to_table()
+            self._remove_file_from_stage
             if os.path.exists(self.local_file_path):
-                # os.remove(self.local_file_path)
+                os.remove(self.local_file_path)
                 self.log.info(
                     f"Local file {self.local_file_path} deleted successfully."
                 )

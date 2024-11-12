@@ -31,7 +31,7 @@ class UCIDataFetchHook(BaseHook):
             if self.dataset:
                 features_df = pd.DataFrame(self.dataset.data.features)
                 ids_df = pd.DataFrame(self.dataset.data.ids)
-                data_df = pd.concat([ids_df,features_df], axis=1)
+                data_df = pd.concat([ids_df, features_df], axis=1)
 
                 if self.output_path:
                     data_df.to_csv(self.output_path, index=False)

@@ -9,20 +9,32 @@ This project builds an end-to-end data pipeline to process and analyze e-commerc
 - **Snowflake**: Serves as the data warehouse for storing and querying data.
 
 ## Project Structure
-- .astro
-- dags
-- dbt
-- include
-- plugins
-- tests
-- .dockerignore
-- .env
-- .gitignore
-- airflow_settings.yaml
-- Dockerfile
-- packages.txt
-- README.md
-- requirements.txt
+bestseller-data-pipeline
+│
+├── .astro                    # .astro directory (configuration for Astro)
+├── dags                       # dags directory (contains Airflow DAGs)
+│   ├── config                 # config directory (configuration files for Airflow dags)
+│   ├── dbt                    # dbt directory 
+│   │   └── bestseller         # dbt project related to the bestseller data pipeline
+│   ├── include                # include directory (for reusable code or resources)
+│   ├── queries                # queries directory (contains SQL query files used in DAGs)
+│   ├── .airflowignore         #  file (to exclude files from being picked up by Airflow)
+│   ├── bestseller_db_setup.py  # Airflow script for running the dbt project and testing
+│   ├── fetch_and_save_uci_data.py  # Airflow script for fetching and saving UCI data
+│   └── load_various_files_to_snowflake.py # Airflow script for loading local data into Snowflake
+│
+├── files                      # files directory (including initial setup and necessary instructions)
+├── include                    # include directory (for shared code or libraries)
+├── plugins                    # plugins directory (for custom Airflow plugins)
+├── tests                      # tests directory (for test scripts and validation)
+│
+├── .dockerignore              # file (specifies which files to ignore during Docker builds)
+├── .gitignore                 # .gitignore file (specifies which files to ignore in version control)
+├── Dockerfile                 # Dockerfile (configuration for building the Docker image)
+├── packages.txt               # packages.txt (list of required packages or dependencies)
+├── README.md                  # README file (documentation of the project)
+└── requirements.txt           # requirements.txt (Python dependencies for the project)
+
 
 ### Airflow with Astro
 

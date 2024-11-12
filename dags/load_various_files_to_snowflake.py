@@ -3,6 +3,8 @@ from datetime import datetime
 from datetime import datetime, timedelta
 from include.custom_operators.snowflake_upload_operator import SnowflakeUploadOperator
 from airflow.utils.task_group import TaskGroup
+from airflow.datasets import Dataset
+from airflow.operators.empty import EmptyOperator
 import yaml
 import logging
 
@@ -30,7 +32,7 @@ def load_config(config_path):
 
 default_args = {
     "owner": "airflow",
-    "depends_on_past": False,
+    "depends_on_past": True,
     "start_date": datetime(2023, 1, 1),
     "email_on_failure": False,
     "email_on_retry": False,
@@ -74,5 +76,11 @@ with dag:
                 dag=dag,
             )
             logging.info(f"Created task: {task_id}")
+    publish_to_dataset = EmptyOperator(
+        task_id="publish_to_dataset",
+        outlets=[Dataset(f"SEED://publish_output_dataset")],
+        dag=dag,
+    )
+    uci_data_task_group >> publish_to_dataset
 
 logging.info("DAG loaded successfully")

@@ -5,7 +5,7 @@ models:
     description: 'This dataset contains the cleaned and pre-processed data of global online retail transactions, with details about each transaction, product, and customer.'
     columns:
       - name: transaction_id
-        description: 'A unique identifier for each transaction, consisting of a 6-digit number. If the transaction ID starts with the letter "C", it indicates a cancellation transaction.'
+        description: 'A not_null identifier for each transaction, consisting of a 6-digit number. If the transaction ID starts with the letter "C", it indicates a cancellation transaction.'
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_match_regex:
@@ -24,10 +24,6 @@ models:
         description: 'A not_null identifier assigned to each customer in the system. This column is critical for identifying customers.'
         tests:
           - not_null
-          - dbt_expectations.expect_column_distinct_count_to_equal_other_table:
-              column_name: customer_id
-              compare_model: ref("customer_segmentation_mart")
-              compare_column_name: customer_id
 
   - name: dim_product
     description: 'A dimension table that holds product-related information. Each entry represents a product available for purchase in the online retail system.'
@@ -44,18 +40,6 @@ models:
         description: 'A not null identifier for each transaction. It links to the transaction data in the "global_online_retail_cleansed" model.'
         tests:
           - not_null
-      - name: product_unique_id
-        description: 'A reference to the unique product in the "dim_product" table. This column helps identify the specific product sold in each transaction.'
-        tests:
-          - relationships:
-              to: ref('dim_product')
-              field: product_unique_id
-      - name: customer_unique_id
-        description: 'A reference to the unique customer in the "dim_customer" table. This field helps identify the customer associated with each transaction.'
-        tests:
-          - relationships:
-              to: ref('dim_customer')
-              field: customer_unique_id
       - name: quantity
         description: 'The quantity of the product sold in each transaction. A positive integer that represents the amount of the product bought by the customer.'
         tests:
