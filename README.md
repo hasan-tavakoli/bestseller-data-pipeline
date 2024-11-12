@@ -139,3 +139,62 @@ In Step 5, the design model is structured as shown below:
 This design represents the architecture and flow of the data pipeline, illustrating how each component interacts with Snowflake and Airflow.
 
 
+## Data Pipeline Explanation
+
+### Step Overview
+
+Let's explain it a bit.
+
+In the previous step, I mentioned that the data is entered into a table named `RAW_ONLINE_RETAIL` in the `RAW` schema. This zone is where raw data is stored. In this area, the data is entered into the table without any changes.
+
+### Data Transformation
+
+In the next step, the data is slightly transformed. For example, names are changed, or fields that should be used as filters are adjusted (meaning those that need to be considered based on the column type).
+
+### Global Zone
+
+In the next phase, I renamed the zone to “Global.” At this stage, the data needs to be transformed further and stored as a table since it might be needed multiple times. I thought that data from other zones might also need to be integrated, and this is where all the data would be accumulated.
+
+### Adding Columns to Prevent Data Removal
+
+However, at this point, several columns are added to the table. I do this to prevent unnecessary data removal. For instance, at some point, we might need to log system failures or other issues.
+
+One such column is `transaction_status`, which indicates whether a transaction is canceled or not.
+
+Another column is `transaction_type`. Based on my research, I found that after cleaning the product ID and transaction ID, it would be better to add this column. In some cases, we might have conditions like:
+
+```sql
+WHEN transaction_status = 'normal' AND quantity > 0 AND unit_price = 0 THEN 'free_or_promotion'
+WHEN transaction_status = 'normal' AND quantity < 0 AND unit_price = 0 THEN 'return_free'
+WHEN transaction_status = 'normal' AND quantity < 0 AND unit_price > 0 THEN 'return_paid'
+WHEN transaction_status = 'cancelled' AND quantity < 0 THEN 'cancelled_return'
+ELSE 'sale'
+```
+
+### Business Assumptions and Other Requirements
+
+Anyway, this is my assumption, and there might be other business cases or requirements.
+
+### Data Cleaning and Ready for Fact and Dimension Tables
+
+After this phase, the data is cleaned and ready for entry into the dimension and fact tables. Upon further analysis, I realized that it would be better to have two dimensions. I assumed that we only deal with these transactions.
+
+### Product ID Variants
+
+Each product ID can have multiple names—this could be related to the same product but with different variants. For example, a product like a carburetor could have different colors, etc.
+
+### Customer Data Segmentation
+
+I also separated customer data so that analysis related to countries for those customers could be retrieved. The first entry date is also useful for tracking purposes.
+
+### Fact Table Considerations
+
+For the fact table, I thought it would be better to have a key because it would make it easier for us to join data when reporting. A fact table also needs to bring in numeric values, and additional columns can be added or removed based on the specific use case.
+
+### Dimensions and Other Tables
+
+The dimensions could potentially have other tables, or they might not be needed here.
+
+### RFM Analysis and Data Mart
+
+In the next step, based on the RFM (Recency, Frequency, Monetary) analysis requirement, I created a consolidated mart, which integrates data from the dimensions obtained via(seed) DBT and the fact table I created.
