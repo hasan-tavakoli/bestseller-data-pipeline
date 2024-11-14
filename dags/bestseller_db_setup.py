@@ -1,4 +1,6 @@
 from cosmos import DbtDag, ProjectConfig, ProfileConfig, ExecutionConfig
+
+
 from cosmos.profiles import SnowflakeUserPasswordProfileMapping
 from airflow.datasets import Dataset
 from datetime import datetime
@@ -19,6 +21,10 @@ def create_dbt_dag():
         execution_config=ExecutionConfig(
             dbt_executable_path="/usr/local/airflow/dbt_venv/bin/dbt",
         ),
+        operator_args={
+        "install_deps": True,  
+        "full_refresh": True,  
+    },
         schedule=[Dataset("SEED://publish_output_dataset")],
         start_date=datetime(2023, 1, 1),
         catchup=False,
