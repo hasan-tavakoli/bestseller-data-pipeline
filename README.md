@@ -1,4 +1,4 @@
-# BESTSELLER Data Pipeline Project
+# DBT Data Pipeline Project
 
 ## Project Overview
 This project builds an end-to-end data pipeline to process and analyze e-commerce transaction data. The goal is to extract data from CSV files, transform it, and load it into a data warehouse for analytics.
